@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<title>Activity</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+	<!-- bootstrap -->
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+	<!-- Temas-->
+	<link rel="stylesheet" type="text/css" href="estilo.css">
+    <script src="./scripts/main.js"></script>
+</head>
+
+<body>
+    <!-- HEADER-->
+    <div class="header">
+        <a href="project.html" class="logo">TODOLIST</a>
+        <div class="header-right">
+        <a href="About.html">About</a>
+        <a href="Login.html">Sign Out</a>
+        </div>
+    </div>
+	<div id="ActContainer">
+			<form id="formCategory" action="" method="post" name="formCategory" class="form-control-lg">
+                <div class="mb-3">
+                    <h1>Create a Category</h1><br>
+                    <label for="task" class="form-label">Category</label>
+                    <label for="color" class="form-label">Color</label><br>
+                    <input type="color" name="color" class="form-category-Item" id="colorpicker" value="#0000ff"><br>
+                    <label for="description"  class="form-label">Description</label>
+                    <input type="text" name="descripcion" id="descripcion" class="form-category-Item form-control" placeholder="ej. Urgent">
+                    <div class="button-container">
+                        <button class="btn btn-lg btn-primary btn-block btn-signin" id="SignUP" type="submit">Create</button>	
+                    </div>
+                </div>
+			</form>
+	</div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.0/axios.min.js"></script>
+    <script>
+        initCreateCategory();
+    </script>
+</body>
+
+</html>
