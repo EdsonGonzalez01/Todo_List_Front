@@ -1,5 +1,8 @@
+const RUTA = "https://to-do-project-dasw-backend.herokuapp.com"
+//const RUTA ="http://localhost:3000"
 function getTasks() {
-    axios.get('http://localhost:3000/tasks/?token=123').then((respuesta) => {
+    const token = localStorage.getItem('token');
+    axios.get(RUTA + '/tasks/?token=123', {headers: {'token': token}}).then((respuesta) => { //
         const tareas = respuesta.data;
         const contenedor = document.getElementById('taskList');
 
@@ -19,8 +22,8 @@ function getTasks() {
 }
 
 function completedTask(taskId) {
-    console.log("Completando tarea: " + taskId)
-    axios.put('http://localhost:3000/tasks/complete/'+taskId+'?token=123').then((respuesta) => {
+    const token = localStorage.getItem('token');
+    axios.post(RUTA + '/tasks/complete/'+taskId+'?token=123', null,  {headers: {'token': token}}).then((respuesta) => {
         console.log(respuesta);
     }).then(data => {
         location.reload()
@@ -29,7 +32,8 @@ function completedTask(taskId) {
 
 
 function getCategories() {
-    axios.get('http://localhost:3000/categories/?token=123').then((respuesta) => {
+    const token = localStorage.getItem('token');
+    axios.get(RUTA + '/categories/?token=123', {headers: {'token': token}}).then((respuesta) => {
         const categorias = respuesta.data;
         const contenedor = document.getElementById('tasksContainer');
 
@@ -45,7 +49,7 @@ function getCategories() {
                     </p>
                 </div>
             `;
-            axios.get('http://localhost:3000/tasks/category/'+descripcion+'?token=123').then((response) => {
+            axios.get(RUTA + '/tasks/category/'+descripcion+'?token=123', {headers: {'token': token}}).then((response) => {
                 const tareas = response.data;
                 const contenedor = document.getElementById(descripcion+'Tasks');
 
@@ -53,7 +57,6 @@ function getCategories() {
                     const _id = element._id;
                     const descripcion = element.descripcion;
                     const observacion = element.observacion;
-                    console.log(_id);
                     const fila = ` 
                         <div class="card flex-item" style="width: 100%;">
                             <div class="card-body">
@@ -73,18 +76,17 @@ function getCategories() {
 }
 
 function editTask(taskId) {
-    console.log("Le pique al boton: " + taskId)
     //window.location.href = window.location.origin + "/editActivity.html";
-
-    axios.get('http://localhost:3000/tasks/'+taskId+'/?token=123').then((respuesta) => { 
+    const token = localStorage.getItem('token');
+    axios.get(RUTA + '/tasks/'+taskId+'/?token=123', {headers: {'token': token}}).then((respuesta) => { 
         const tarea = respuesta.data;
-        console.log("Tarea front " + tarea.descripcion);
     }) 
 }
 
 
 function getCategoriesSelect() {
-    axios.get('http://localhost:3000/categories/?token=123').then((respuesta) => {
+    const token = localStorage.getItem('token');
+    axios.get(RUTA + '/categories/?token=123', {headers: {'token': token}}).then((respuesta) => {
         const categorias = respuesta.data;
         const contenedor = document.getElementById('prioridad');
 
@@ -112,19 +114,16 @@ function initCreateTask() {
     form.addEventListener('submit', async function (event) {
         event.preventDefault();
         const elementosForm = this.querySelectorAll(".form-Item")
-        console.log(elementosForm);
         elementosForm.forEach(function (elemento) {
             campos[elemento.name] = elemento.value;
         })
-        console.log(campos);
 
         const respuesta = await axiosCreate(campos);
-        console.log(respuesta);
         if(respuesta != "error"){
             divSuccess.textContent="Se creo correctamente la tarea: " + respuesta.data.descripcion;
             divSuccess.style.visibility="visible"
         }else{
-            divError.textContent="Ocurrio un error al crar la tarea" 
+            divError.textContent="Ocurrio un error al crear la tarea" 
             divError.style.visibility="visible"
         }
     })
@@ -132,40 +131,35 @@ function initCreateTask() {
 
 async function axiosCreate(campos) {
     // create a promise for the axios request
+    const token = localStorage.getItem('token');
     try {
-        const respuesta = await axios.post('http://localhost:3000/tasks/create?token=123', campos) 
+        const respuesta = await axios.post(RUTA + '/tasks/create?token=123', campos, {headers: {'token': token}}) 
         return(respuesta)
     } catch (error) {
-        console.log(error);
         return("error")
     }
     
 }
 
 function UpdateTask() {
-    
-    
     const form = document.getElementById('formTask');
     const campos = {};
-    console.log("En el update task");
     let params = new URLSearchParams(document.location.search);
     const taskId = params.get("task")
     
     form.addEventListener('submit', async function (event) {
-        console.log("Hubo un submit");
         event.preventDefault();
         const elementosForm = this.querySelectorAll(".form-Item")
         console.log(elementosForm);
         elementosForm.forEach(function (elemento) {
             campos[elemento.name] = elemento.value;
         });
-        //console.log(campos);
         const datos = await axiosUpdate(taskId, campos);
-        console.log(datos);
         if(datos.status == 200){
             const divSuccess = document.getElementById("alert-success");
-            divSuccess.textContent="Se edito correctamente la tarea" 
+            divSuccess.textContent="Se editó correctamente la tarea" 
             divSuccess.style.visibility="visible"
+            window.location = "./Tablero.html";
         }
         else{
             const divError = document.getElementById("alert-error");
@@ -175,10 +169,101 @@ function UpdateTask() {
     })
 }
 
-async function axiosUpdate(taskId, campos) {
+function initLogin(){
+    const divError = document.getElementById("alert-error");
+    divError.style.visibility = 'hidden';
+
+    const form = document.getElementById('Login_Form');
+    form.addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const correo = document.querySelector('input[name="email"]').value;
+        const password = document.querySelector('input[name="password"]').value;
+
+        const obj = {
+            correo: correo,
+            password: password
+        }
+
+
+        const respuesta = await axiosLogin(obj);
+        if(respuesta == "error"){
+            divError.textContent="Usuario o contraseña incorrecto. Intentalo de nuevo" 
+            divError.style.visibility="visible"
+        }
+    })
+}
+
+async function axiosLogin(obj) {
     // create a promise for the axios request
     try {
-        const respuesta = await axios.put('http://localhost:3000/tasks/update/'+taskId+'?token=123', campos)    
+        
+        const respuesta = await axios.post(RUTA + '/users/login?token=123', obj).then((respuesta) => { 
+            const token = respuesta.data.token;
+            localStorage.setItem('token', token);
+            window.location = './project.html';  
+        })
+        return(respuesta);
+    } catch (error) {
+        return("error")
+    }
+    
+}
+
+
+function initRegister(){
+    const divError = document.getElementById("alert-error");
+    divError.style.visibility = 'hidden';
+    const form = document.getElementById('formSignUp');
+    form.addEventListener('submit', async function (event) {
+        event.preventDefault();
+
+        const correo = document.querySelector('input[name="email"]').value;
+        const password = document.querySelector('input[name="password"]').value;
+
+        const obj={
+            correo: correo,
+            password: password
+        }
+
+        const respuesta = await axiosSignUp(obj);
+        if(respuesta == "error"){
+            divError.textContent="Usuario o contraseña incorrecto. Intentalo de nuevo" 
+            divError.style.visibility="visible"
+        }else{
+
+        }
+
+    })
+
+}
+
+async function axiosSignUp(obj) {
+    // create a promise for the axios request
+    try {
+        const respuesta = await axios.post(RUTA + '/users/create?token=123', obj).then((respuesta) => { 
+            window.location = './Login.html';  
+        })
+        return(respuesta);
+    } catch (error) {
+        return("error")
+    }
+    
+}
+
+
+
+async function axiosUpdate(taskId, campos) {
+    // create a promise for the axios request
+    const token = localStorage.getItem('token');
+    try {
+        const respuesta = await axios.post(RUTA + '/users/create/?token=123', obj).then((respuesta) => { 
+            if(respuesta.status == 200){
+                window.location = "./Login.html"
+
+            }
+            console.log(respuesta);
+        })
         return(respuesta)
     } catch (error) {
         console.log(error);
@@ -190,14 +275,13 @@ async function axiosUpdate(taskId, campos) {
 function initEditTask() {
     const divSuccess = document.getElementById("alert-success");
     const divError = document.getElementById("alert-error");
-    divSuccess.style.visibility = 'hidden' ;
     divError.style.visibility = 'hidden' ;
-    console.log(document.location.search);
+    divSuccess.style.visibility = 'hidden' ;
     let params = new URLSearchParams(document.location.search);
     const taskId = params.get("task")
-    console.log(taskId); 
+    const token = localStorage.getItem('token');
 
-    axios.get('http://localhost:3000/categories/?token=123').then((respuesta) => {
+    axios.get(RUTA + '/categories/?token=123', {headers: {'token': token}}).then((respuesta) => {
         const categorias = respuesta.data;
         const contenedor = document.getElementById('prioridad');
 
@@ -209,15 +293,12 @@ function initEditTask() {
             contenedor.innerHTML += fila;
         });
     }).then(data=>{
-        axios.get('http://localhost:3000/tasks/'+taskId+'?token=123').then((respuesta) => {
-            console.log(respuesta);
+        axios.get(RUTA + '/tasks/'+taskId+'?token=123', {headers: {'token': token}}).then((respuesta) => {
             return respuesta.data;
         }).then(respuesta => {
-            console.log(respuesta)
             return(respuesta)
         }).then(respuesta => {
             document.getElementById('descripcion').value = respuesta.descripcion;
-            console.log(respuesta.prioridad)
             document.getElementById('observacion').value = respuesta.observacion;
             document.getElementById('prioridad').value = respuesta.prioridad;
             document.getElementById('fecha_inicio').value = new Date(respuesta.fecha_inicio).toISOString().substring(0,10);
@@ -229,19 +310,44 @@ function initEditTask() {
 
 function initCreateCategory() {
     const form = document.getElementById('formCategory');
+    const token = localStorage.getItem('token');
+    const divError = document.getElementById("alert-error");
+    divError.style.visibility = 'hidden' ;
     const campos = {};
-    form.addEventListener('submit', function (event) {
+    form.addEventListener('submit', async function (event) {
         event.preventDefault();
         const elementosForm = this.querySelectorAll(".form-category-Item")
-        console.log(elementosForm);
         elementosForm.forEach(function (elemento) {
             campos[elemento.name] = elemento.value;
         })
-        console.log(campos);
 
-        axios.post('http://localhost:3000/categories/create?token=123', campos).then((respuesta) => {
+        const respuesta = await axiosCreateCat(campos);
+        if(respuesta == "error"){
+            divError.textContent="Error al crear categoria. Intentalo de nuevo" 
+            divError.style.visibility="visible"
+        }
+
+
+    })
+}
+
+
+async function axiosCreateCat(campos) {
+    // create a promise for the axios request
+    const token = localStorage.getItem('token');
+    try {
+        const respuesta = await axios.post(RUTA + '/categories/create?token=123', campos, {headers: {'token': token}}).then((respuesta) => {
+            if(respuesta.status == 200){
+
+                window.location = "./Tablero.html"
+            }
             console.log(respuesta);
 
         });
-    })
+        return(respuesta)
+    } catch (error) {
+        console.log(error);
+        return("error")
+    }
+    
 }

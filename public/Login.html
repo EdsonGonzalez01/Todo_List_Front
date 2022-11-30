@@ -11,36 +11,41 @@
 	<link rel="stylesheet"href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/fontawesome.min.css"
 		integrity="sha384-z4tVnCr80ZcL0iufVdGQSUzNvJsKjEtqYZjiQrrYKlpGow+btDHDfQWkFjoaz/Zr" crossorigin="anonymous">
 	<!--Estilos login-->
-	<link rel="stylesheet" type="text/css" href="estilo.css">
+	<link rel="stylesheet" type="text/css" href="./estilo.css">
+	<script src="./scripts/main.js"></script>
+
 </head>
 
 <body>
-	<div id="Contenedor">
+	<div id="alert-error" class="alert alert-danger" role="alert"></div>
+	<div id="Contenedor" class="container">
 
 		<div class="ContentForm">
 			<h1>To do List</h1>
-			<form action="" method="post" name="FormEntrar">
+			<form id="Login_Form" name="Login_Form">
 				<div class="input-group input-group-lg">
 					<span class="input-group-addon" id="sizing-addon1"><i
 							class="glyphicon glyphicon-envelope"></i></span>
-					<input type="email" class="form-control" name="Email" placeholder="Email" id="Correo"
+					<input type="email" class="form-control" name="email" placeholder="Email" id="email"
 						aria-describedby="sizing-addon1" required>
 				</div>
 				<br>
 				<div class="input-group input-group-lg">
 					<span class="input-group-addon" id="sizing-addon1"><i class="glyphicon glyphicon-lock"></i></span>
-					<input type="password" name="contra" class="form-control" placeholder="Password"
+					<input type="password" name="password" id="password" class="form-control" placeholder="Password"
 						aria-describedby="sizing-addon1" required>
 				</div>
 				<br>
 				<div class="button-container">
-					<a class="btn btn-primary" href="project.html" role="button">Log In</a>
-					<a class="btn btn-primary" href="SignUP.html" role="button">Register</a>
+					<button class="btn btn-primary" role="button">Log In</button>
+					<a class="btn btn-primary" href="./SignUP.html" role="button">Register</a>
 				</div>
 				<div class="opcioncontra"><a href="">Forgot your password?</a></div>
 			</form>
 		</div>
 	</div>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.2.0/axios.min.js"></script>
+	<script>initLogin();</script>
 </body>
 <!-- vinculando a libreria Jquery-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
@@ -48,5 +53,7 @@
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
 	integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
 	crossorigin="anonymous"></script>
+
+
 
 </html>
