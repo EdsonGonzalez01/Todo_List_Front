@@ -156,7 +156,7 @@ function UpdateTask() {
         });
         const datos = await axiosUpdate(taskId, campos);
         console.log(datos);
-        if(datos.status == 200){
+        if(datos != error){
             const divSuccess = document.getElementById("alert-success");
             divSuccess.textContent="Se editó correctamente la tarea" 
             divSuccess.style.visibility="visible"
@@ -174,12 +174,9 @@ async function axiosUpdate(taskId,campos) {
     // create a promise for the axios request
     const token = localStorage.getItem('token');
     try {
-        const respuesta = await axios.post(RUTA + '/tasks/update/'+taskId +'?token=123', campos, {headers: {'token': token}}).then((respuesta) => { 
-            console.log(respuesta);
-        });
+        const respuesta = await axios.post(RUTA + '/tasks/update/'+taskId +'?token=123', campos, {headers: {'token': token}})
         return(respuesta);
     } catch (error) {
-        console.log(error);
         return("error")
     }
     
