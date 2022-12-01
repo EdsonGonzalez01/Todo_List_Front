@@ -257,7 +257,7 @@ async function axiosUpdate(taskId,campos) {
     // create a promise for the axios request
     const token = localStorage.getItem('token');
     try {
-        const respuesta = await axios.post(RUTA + '/tasks/update/'+taskId +'?token=123', campos).then((respuesta) => { 
+        const respuesta = await axios.post(RUTA + '/tasks/update/'+taskId +'?token=123', campos, {headers: {'token': token}}).then((respuesta) => { 
             if(respuesta.status == 200){
                 window.location = "./Tablero.html"
 
