@@ -154,7 +154,7 @@ function UpdateTask() {
         elementosForm.forEach(function (elemento) {
             campos[elemento.name] = elemento.value;
         });
-        const datos = await axiosUpdate(taskId, campos);
+        const datos = await axiosUpdate(campos);
         if(datos.status == 200){
             const divSuccess = document.getElementById("alert-success");
             divSuccess.textContent="Se editó correctamente la tarea" 
@@ -253,11 +253,11 @@ async function axiosSignUp(obj) {
 
 
 
-async function axiosUpdate(taskId, campos) {
+async function axiosUpdate(campos) {
     // create a promise for the axios request
     const token = localStorage.getItem('token');
     try {
-        const respuesta = await axios.post(RUTA + '/users/create/?token=123', obj).then((respuesta) => { 
+        const respuesta = await axios.post(RUTA + '/users/create/?token=123', campos).then((respuesta) => { 
             if(respuesta.status == 200){
                 window.location = "./Login.html"
 
