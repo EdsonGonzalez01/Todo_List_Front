@@ -154,7 +154,7 @@ function UpdateTask() {
         elementosForm.forEach(function (elemento) {
             campos[elemento.name] = elemento.value;
         });
-        const datos = await axiosUpdate(campos);
+        const datos = await axiosUpdate(taskId, campos);
         if(datos.status == 200){
             const divSuccess = document.getElementById("alert-success");
             divSuccess.textContent="Se editó correctamente la tarea" 
@@ -205,7 +205,7 @@ async function axiosLogin(obj) {
         })
         return(respuesta);
     } catch (error) {
-        return("error")
+      return("error")
     }
     
 }
@@ -253,11 +253,11 @@ async function axiosSignUp(obj) {
 
 
 
-async function axiosUpdate(campos) {
+async function axiosUpdate(taskId,campos) {
     // create a promise for the axios request
     const token = localStorage.getItem('token');
     try {
-        const respuesta = await axios.post(RUTA + '/users/create/?token=123', campos).then((respuesta) => { 
+        const respuesta = await axios.post(RUTA + '/tasks/update/'+taskId +'?token=123', campos).then((respuesta) => { 
             if(respuesta.status == 200){
                 window.location = "./Tablero.html"
 
