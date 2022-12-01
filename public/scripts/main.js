@@ -169,6 +169,22 @@ function UpdateTask() {
     })
 }
 
+async function axiosUpdate(taskId,campos) {
+    // create a promise for the axios request
+    const token = localStorage.getItem('token');
+    try {
+        const respuesta = await axios.post(RUTA + '/tasks/update/'+taskId +'?token=123', campos, {headers: {'token': token}}).then((respuesta) => { 
+            console.log(respuesta);
+        });
+        return(respuesta);
+    } catch (error) {
+        console.log(error);
+        return("error")
+    }
+    
+}
+
+
 function initLogin(){
     const divError = document.getElementById("alert-error");
     divError.style.visibility = 'hidden';
@@ -246,27 +262,6 @@ async function axiosSignUp(obj) {
         })
         return(respuesta);
     } catch (error) {
-        return("error")
-    }
-    
-}
-
-
-
-async function axiosUpdate(taskId,campos) {
-    // create a promise for the axios request
-    const token = localStorage.getItem('token');
-    try {
-        const respuesta = await axios.post(RUTA + '/tasks/update/'+taskId +'?token=123', campos, {headers: {'token': token}}).then((respuesta) => { 
-            if(respuesta.status == 200){
-                window.location = "./Tablero.html"
-
-            }
-            console.log(respuesta);
-        })
-        return(respuesta)
-    } catch (error) {
-        console.log(error);
         return("error")
     }
     
