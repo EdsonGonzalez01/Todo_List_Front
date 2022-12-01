@@ -259,7 +259,7 @@ async function axiosUpdate(campos) {
     try {
         const respuesta = await axios.post(RUTA + '/users/create/?token=123', campos).then((respuesta) => { 
             if(respuesta.status == 200){
-                window.location = "./Login.html"
+                window.location = "./Tablero.html"
 
             }
             console.log(respuesta);
