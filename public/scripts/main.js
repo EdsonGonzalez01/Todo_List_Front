@@ -155,6 +155,7 @@ function UpdateTask() {
             campos[elemento.name] = elemento.value;
         });
         const datos = await axiosUpdate(taskId, campos);
+        console.log(datos);
         if(datos.status == 200){
             const divSuccess = document.getElementById("alert-success");
             divSuccess.textContent="Se editó correctamente la tarea" 
