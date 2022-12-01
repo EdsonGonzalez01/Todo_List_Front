@@ -156,7 +156,7 @@ function UpdateTask() {
         });
         const datos = await axiosUpdate(taskId, campos);
         console.log(datos);
-        if(datos != error){
+        if(datos != "error"){
             const divSuccess = document.getElementById("alert-success");
             divSuccess.textContent="Se editó correctamente la tarea" 
             divSuccess.style.visibility="visible"
